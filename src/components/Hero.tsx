@@ -114,7 +114,7 @@ const Hero = () => {
             <div
               key={index}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentImageIndex ? "opacity-40" : "opacity-0"
+                index === currentImageIndex ? "opacity-20" : "opacity-0"
               }`}
             >
               <img
@@ -124,7 +124,7 @@ const Hero = () => {
               />
             </div>
           ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/90"></div>
         </div>
 
         {/* Slide Indicators */}
