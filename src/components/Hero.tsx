@@ -114,7 +114,7 @@ const Hero = () => {
     <div
       key={index}
       className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-        index === currentImageIndex ? "opacity-40" : "opacity-0"
+        index === currentImageIndex ? "opacity-50" : "opacity-0"
       }`}
     >
       <img
