@@ -51,7 +51,7 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
               <Phone size={14} />
-              <span>1-800-BLEN-HAIR</span>
+              <span>+1 (786) 628-0163</span>
             </div>
             <div className="flex items-center space-x-1">
               <MapPin size={14} />
