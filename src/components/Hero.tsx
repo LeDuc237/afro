@@ -108,23 +108,24 @@ const Hero = () => {
       {/* Main Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         {/* Sliding Background Images */}
-        <div className="absolute inset-0 z-0">
-          {backgroundImages.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentImageIndex ? "opacity-10" : "opacity-0"
-              }`}
-            >
-              <img
-                src={image || "/placeholder.svg"}
-                alt={`Premium Afro Kinky Bulk Hair ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/90"></div>
-        </div>
+        {/* Sliding Background Images */}
+<div className="absolute inset-0 z-0">
+  {backgroundImages.map((image, index) => (
+    <div
+      key={index}
+      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+        index === currentImageIndex ? "opacity-30" : "opacity-0"
+      }`}
+    >
+      <img
+        src={image || "/placeholder.svg"}
+        alt={`Premium Afro Kinky Bulk Hair ${index + 1}`}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  ))}
+  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
+</div>
 
         {/* Slide Indicators */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
