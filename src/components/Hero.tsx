@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { ArrowRight, Star, Shield, Truck, CreditCard } from "lucide-react"
@@ -114,7 +113,7 @@ const Hero = () => {
             <div
               key={index}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentImageIndex ? "opacity-20" : "opacity-0"
+                index === currentImageIndex ? "opacity-10" : "opacity-0"
               }`}
             >
               <img
