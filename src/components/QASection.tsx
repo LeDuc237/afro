@@ -88,8 +88,8 @@ const QASection = ({ isHomePage = false }: QASectionProps) => {
   if (isHomePage && !isExpanded) {
     return (
       <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto  bg-pink-900 hover:bg-pink-700  px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+        <div className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8">
+          <div className="text-center  bg-pink-900 hover:bg-pink-700">
             <button
               onClick={toggleSection}
               className="bg-white rounded-2xl  shadow-lg p-6 hover:shadow-xl transition-all duration-300 inline-flex items-center space-x-3"
