@@ -241,7 +241,7 @@ const AfroKinkyCollection = () => {
 
         {/* Call to Action */}
         <div className="text-center mt-16">
-          <div className="bg-gradient-to-r  rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">Need Help Choosing the Perfect Hair?</h3>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
               Our hair experts are here to help you find the perfect match for your style and needs.
