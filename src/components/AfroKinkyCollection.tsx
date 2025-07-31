@@ -232,7 +232,7 @@ const AfroKinkyCollection = () => {
           <div className="text-center mt-12">
             <button
               onClick={() => setShowAllProducts(true)}
-              className="bg-gray-900 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors shadow-lg"
+              className="bg-pink-900 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-pink-800 transition-colors shadow-lg"
             >
               View All Products ({allProducts.length} total)
             </button>
