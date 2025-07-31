@@ -210,7 +210,7 @@ const AfroKinkyCollection = () => {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => handleProductClick(product.id)}
-                    className="flex-1 bg-gray-900 text-white py-2 md:py-3 rounded-lg font-semibold text-xs md:text-base hover:bg-gray-800 transition-colors"
+                    className="flex-1 bg-rose-900 text-white py-2 md:py-3 rounded-lg font-semibold text-xs md:text-base hover:bg-gray-800 transition-colors"
                   >
                     <span className="hidden sm:inline">View Product</span>
                     <span className="sm:hidden">View</span>
