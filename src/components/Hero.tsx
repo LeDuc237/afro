@@ -183,7 +183,7 @@ const Hero = () => {
             </button>
             <button
               onClick={handleShopNow}
-              className="border-2 border-white text-white px-6 py-3 sm:py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              className="border-2 border-white text-white px-20 py-3 sm:py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
             >
               View Afro Kinky Collection
               <ArrowRight size={20} />
