@@ -1,8 +1,7 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useMediaQuery } from "react-responsive"
 import {
   ArrowLeft,
   Star,
@@ -38,6 +37,7 @@ const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addToCart } = useCart()
+  const isMobile = useMediaQuery({ maxWidth: 767 })
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
@@ -295,6 +295,26 @@ const ProductPage: React.FC = () => {
                 )}
               </div>
 
+              {/* Weight Info for Desktop */}
+              {!isMobile && (
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h4 className="font-semibold">Pack Details</h4>
+                      <p className="text-sm text-gray-600">
+                        {selectedPack} pack{selectedPack > 1 ? 's' : ''} = {selectedPack * 50}g
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Total Weight</h4>
+                      <p className="text-sm text-gray-600">
+                        {quantity * selectedPack * 50}g (for {quantity} order{quantity > 1 ? 's' : ''})
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Thumbnail Images */}
               {currentProduct?.images && currentProduct.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
@@ -526,7 +546,25 @@ const ProductPage: React.FC = () => {
                   <span>Add to Cart</span>
                 </button>
 
-                
+                {/* Weight Info for Mobile */}
+                {isMobile && (
+                  <div className="bg-white p-4 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-semibold">Pack Details</h4>
+                        <p className="text-sm text-gray-600">
+                          {selectedPack} pack{selectedPack > 1 ? 's' : ''} = {selectedPack * 50}g
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Total Weight</h4>
+                        <p className="text-sm text-gray-600">
+                          {quantity * selectedPack * 50}g (for {quantity} order{quantity > 1 ? 's' : ''})
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Trust Badges */}
@@ -843,7 +881,7 @@ const ProductPage: React.FC = () => {
                       <div className="space-y-3">
                         <div>
                           <p className="font-medium">Free Worldwide Shipping</p>
-                          <p className="text-sm text-gray-600">On all orders, no minimum required</p>
+                          <p className="text-sm text-gray-600">On all orders, no no minimum required</p>
                         </div>
                         <div>
                           <p className="font-medium">Processing Time</p>
