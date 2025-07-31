@@ -173,7 +173,7 @@ const Hero = () => {
           </p>
 
           {/* Call-to-Action Buttons */}
-           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
             <button
               onClick={handleShopNow}
               className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white px-10 py-5 rounded-xl font-bold text-xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-3 shadow-2xl"
