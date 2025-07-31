@@ -110,7 +110,7 @@ const QASection = ({ isHomePage = false }: QASectionProps) => {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center space-x-3 mb-6">
-            <h2 className="text-4xl bg-pink-900 hover:bg-pink-700 md:text-5xl font-bold text-gray-900">Q&A - Afro Kinky Bulk</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Q&A - Afro Kinky Bulk</h2>
             {isHomePage && (
               <button onClick={toggleSection} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
                 <ChevronUp className="text-gray-500" size={24} />
