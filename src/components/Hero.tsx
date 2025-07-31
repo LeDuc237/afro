@@ -129,22 +129,6 @@ const Hero = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
         </div>
 
-        {/* Slide Indicators */}
-        {/* Remove this entire section */}
-<div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-  {backgroundImages.map((_, index) => (
-    <button
-      key={index}
-      onClick={() => setCurrentImageIndex(index)}
-      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-        index === currentImageIndex
-          ? "bg-white scale-125"
-          : "bg-white/50 hover:bg-white/75"
-      }`}
-      aria-label={`Go to slide ${index + 1}`}
-    />
-  ))}
-</div>
 
         {/* Content */}
         <div className="relative z-10 text-center max-w-6xl mx-auto px-4 sm:px-6">
