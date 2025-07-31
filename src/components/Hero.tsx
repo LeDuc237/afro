@@ -142,10 +142,7 @@ const Hero = () => {
 
         {/* Content */}
         <div className="relative z-10 text-center max-w-6xl mx-auto px-6">
-          {/* Special Offer Banner */}
-          <div className="bg-gradient-to-r from-red-600 to-red-500 text-white py-3 px-8 rounded-full inline-block mb-8 shadow-2xl animate-pulse">
-            <span className="font-bold text-lg">🔥 30% OFF FIRST ORDER + FREE SHIPPING</span>
-          </div>
+    
 
           {/* Trust Badges */}
           <div className="flex flex-wrap justify-center items-center gap-4 mb-8 text-white/90">
