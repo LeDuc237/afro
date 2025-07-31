@@ -88,11 +88,11 @@ const QASection = ({ isHomePage = false }: QASectionProps) => {
   if (isHomePage && !isExpanded) {
     return (
       <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto  bg-pink-900 hover:bg-pink-700  px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <button
               onClick={toggleSection}
-              className="bg-white rounded-2xl   bg-pink-900 hover:bg-pink-700 shadow-lg p-6 hover:shadow-xl transition-all duration-300 inline-flex items-center space-x-3"
+              className="bg-white rounded-2xl  shadow-lg p-6 hover:shadow-xl transition-all duration-300 inline-flex items-center space-x-3"
             >
               <HelpCircle className="text-gray-600" size={24} />
               <span className="text-xl font-bold text-gray-900">Q&A - Afro Kinky Bulk</span>
