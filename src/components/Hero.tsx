@@ -145,7 +145,7 @@ const Hero = () => {
     
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center items-center gap-4 mb-8 text-white/90">
+          <div className="flex  grid-cols-3 gap-3 flex-wrap justify-center items-center gap-4 mb-8 text-white/90">
             <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
               <Star className="text-yellow-400" size={18} />
               <span className="font-semibold">4.9/5 Rating</span>
