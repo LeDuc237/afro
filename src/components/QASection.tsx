@@ -94,7 +94,7 @@ const QASection = ({ isHomePage = false }: QASectionProps) => {
               onClick={toggleSection}
               className=" bg-pink-900 hover:bg-pink-700rounded-2xl  shadow-lg p-6 hover:shadow-xl transition-all duration-300 inline-flex items-center space-x-3 "
             >
-              <HelpCircle className="text-gray-600" size={24} />
+              <HelpCircle className="text-white-600" size={24} />
               <span className="text-xl font-bold text-White-900">Q&A - Afro Kinky Bulk</span>
               <ChevronDown className="text-gray-500" size={24} />
             </button>
