@@ -58,9 +58,6 @@ const Header = () => {
               <span>Free Worldwide Shipping</span>
             </div>
           </div>
-          <div className="text-yellow-300 font-bold">
-            🔥 30% OFF FIRST ORDER + FREE SHIPPING
-          </div>
         </div>
       </div>
 
