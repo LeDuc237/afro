@@ -145,18 +145,18 @@ const Hero = () => {
     
 
           {/* Trust Badges */}
-          <div className="flex flex-row flex-nowrap overflow-x-auto gap-3 justify-center items-center mb-8 text-white/90">
-  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+          <div className="flex flex-nowrap justify-center items-center gap-2 mb-8 text-white/90 whitespace-nowrap overflow-hidden">
+  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm sm:text-base sm:px-4 sm:py-2">
     <Star className="text-yellow-400" size={18} />
-    <span className="font-semibold">4.9/5 Rating</span>
+    <span className="font-semibold">4.9/5</span>
   </div>
-  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm sm:text-base sm:px-4 sm:py-2">
     <Shield className="text-green-400" size={18} />
-    <span className="font-semibold">100% Human Hair</span>
+    <span className="font-semibold">100% Human</span>
   </div>
-  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm sm:text-base sm:px-4 sm:py-2">
     <Truck className="text-blue-400" size={18} />
-    <span className="font-semibold">Free Worldwide Shipping</span>
+    <span className="font-semibold">Free Shipping</span>
   </div>
 </div>
 
