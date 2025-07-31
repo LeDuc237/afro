@@ -176,7 +176,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 w-full max-w-md mx-auto">
             <button
               onClick={handleShopNow}
-              className="bg-gradient-to-r from-red-600 to-red-500 text-white px-6 py-3 sm:py-4 rounded-lg font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+              className="bg-gradient-to-r from-red-600 to-red-500 text-white px-12 py-3 sm:py-4 rounded-lg font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
             >
               Shop Collection - Save 30%
               <ArrowRight size={20} />
