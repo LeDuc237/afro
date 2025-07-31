@@ -145,20 +145,20 @@ const Hero = () => {
     
 
           {/* Trust Badges */}
-          <div className="flex  grid-cols-3 gap-3 flex-wrap justify-center items-center gap-4 mb-8 text-white/90">
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Star className="text-yellow-400" size={18} />
-              <span className="font-semibold">4.9/5 Rating</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Shield className="text-green-400" size={18} />
-              <span className="font-semibold">100% Human Hair</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Truck className="text-blue-400" size={18} />
-              <span className="font-semibold">Free Worldwide Shipping</span>
-            </div>
-          </div>
+          <div className="flex flex-row flex-nowrap overflow-x-auto gap-3 justify-center items-center mb-8 text-white/90">
+  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+    <Star className="text-yellow-400" size={18} />
+    <span className="font-semibold">4.9/5 Rating</span>
+  </div>
+  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+    <Shield className="text-green-400" size={18} />
+    <span className="font-semibold">100% Human Hair</span>
+  </div>
+  <div className="flex-shrink-0 flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+    <Truck className="text-blue-400" size={18} />
+    <span className="font-semibold">Free Worldwide Shipping</span>
+  </div>
+</div>
 
           <h1 className="font-bold text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-tight">
             Premium Afro Kinky
