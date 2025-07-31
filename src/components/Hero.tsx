@@ -108,7 +108,7 @@ const Hero = () => {
   return (
     <>
       {/* Main Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         {/* Sliding Background Images */}
         <div className="absolute inset-0 z-0">
           {backgroundImages.map((image, index) => (
