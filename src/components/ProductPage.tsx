@@ -526,16 +526,7 @@ const ProductPage: React.FC = () => {
                   <span>Add to Cart</span>
                 </button>
 
-                <div className="flex space-x-4">
-                  <button className="flex-1 flex items-center justify-center space-x-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <Heart size={18} />
-                    <span>Add to Wishlist</span>
-                  </button>
-                  <button className="flex-1 flex items-center justify-center space-x-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <Share2 size={18} />
-                    <span>Share</span>
-                  </button>
-                </div>
+                
               </div>
 
               {/* Trust Badges */}
