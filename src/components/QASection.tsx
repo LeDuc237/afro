@@ -95,7 +95,7 @@ const QASection = ({ isHomePage = false }: QASectionProps) => {
               className="bg-white rounded-2xl  shadow-lg p-6 hover:shadow-xl transition-all duration-300 inline-flex items-center space-x-3 "
             >
               <HelpCircle className="text-gray-600" size={24} />
-              <span className="text-xl font-bold text--900">Q&A - Afro Kinky Bulk</span>
+              <span className="text-xl font-bold text-grey-900">Q&A - Afro Kinky Bulk</span>
               <ChevronDown className="text-gray-500" size={24} />
             </button>
           </div>
