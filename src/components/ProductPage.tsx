@@ -39,6 +39,7 @@ const ProductPage: React.FC = () => {
   const { addToCart } = useCart()
   const isMobile = useMediaQuery({ maxWidth: 767 })
 
+  // State management
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState("description")
@@ -57,18 +58,15 @@ const ProductPage: React.FC = () => {
     review: "",
   })
 
-  // Find the product by ID
+  // Product data
   const product = getAllProducts().find((p) => p.id === id)
-
-  // Available options
   const availableColors = getAvailableColors()
   const availableLengths = getAvailableLengths()
   const packOptions = getPackOptions()
 
-  // Initialize selections with product defaults
+  // Initialize product selections
   useEffect(() => {
     if (product) {
-      // Extract color and length from product
       const colorKey = product.color.toLowerCase().replace(" ", "-")
       const length = product.length
 
@@ -81,20 +79,14 @@ const ProductPage: React.FC = () => {
     }
   }, [product])
 
-  // Calculate current product based on selections
+  // Get current product variant based on selections
   const getCurrentProduct = () => {
     if (!product) return null
 
-    // Try to find a product that matches the selected color and length
     const colorName = availableColors.find((c) => c.key === selectedColor)?.name || "Natural Black"
     const matchingProduct = getAllProducts().find((p) => p.color === colorName && p.length === selectedLength)
 
-    if (matchingProduct) {
-      return matchingProduct
-    }
-
-    // If no exact match, create a variant based on the original product
-    return {
+    return matchingProduct || {
       ...product,
       color: colorName,
       length: selectedLength,
@@ -104,17 +96,23 @@ const ProductPage: React.FC = () => {
 
   const currentProduct = getCurrentProduct()
 
-  // Calculate pricing
+  // Calculate pricing based on selections
   const calculatePrice = () => {
-    if (!currentProduct)
-      return { basePrice: 0, totalPrice: 0, savings: 0, pricePerPack: 0, originalPrice: 0, discountPercentage: 0 }
+    if (!currentProduct) return {
+      basePrice: 0,
+      totalPrice: 0,
+      savings: 0,
+      pricePerPack: 0,
+      originalPrice: 0,
+      discountPercentage: 0
+    }
 
     const basePrice = getPriceForLength(selectedLength)
     const colorMultiplier = getColorMultiplier(selectedColor)
     const adjustedPrice = Math.round(basePrice * colorMultiplier)
-    const originalPrice = adjustedPrice + 20 // Original price before discount
-
+    const originalPrice = adjustedPrice + 20
     const packOption = packOptions.find((p) => p.count === selectedPack) || packOptions[0]
+    
     const totalBeforeDiscount = adjustedPrice * selectedPack * quantity
     const totalDiscount = packOption.discount * quantity
     const totalPrice = totalBeforeDiscount - totalDiscount
@@ -133,12 +131,12 @@ const ProductPage: React.FC = () => {
 
   const pricing = calculatePrice()
 
-  // Handle add to cart
+  // Cart and purchase handlers
   const handleAddToCart = () => {
     if (!currentProduct) return
 
     const cartItem = {
-      id: Date.now(), // Unique cart item ID
+      id: Date.now(),
       name: `${currentProduct.name} (${selectedPack} Pack${selectedPack > 1 ? "s" : ""})`,
       price: pricing.pricePerPack,
       image: currentProduct.image,
@@ -150,10 +148,9 @@ const ProductPage: React.FC = () => {
 
     addToCart(cartItem)
 
-    // Show success message
+    // Show success notification
     const successDiv = document.createElement("div")
-    successDiv.className =
-      "fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2"
+    successDiv.className = "fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2"
     successDiv.innerHTML = `
       <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
@@ -164,23 +161,16 @@ const ProductPage: React.FC = () => {
     setTimeout(() => successDiv.remove(), 3000)
   }
 
-  // Handle buy now
   const handleBuyNow = () => {
     handleAddToCart()
     setIsPaymentModalOpen(true)
   }
 
-  // Handle review submission
+  // Review form handler
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
-    // Here you would typically send the review to your backend
     console.log("Review submitted:", reviewForm)
-
-    // Show success message
     alert("Thank you for your review! It will be published after moderation.")
-
-    // Reset form and close modal
     setReviewForm({
       name: "",
       email: "",
@@ -191,13 +181,11 @@ const ProductPage: React.FC = () => {
     setShowReviewModal(false)
   }
 
-  // Get similar products
+  // Navigation
   const similarProducts = currentProduct ? getSimilarProducts(currentProduct) : []
+  const handleProductClick = (productId: string) => navigate(`/product/${productId}`)
 
-  const handleProductClick = (productId: string) => {
-    navigate(`/product/${productId}`)
-  }
-
+  // Product not found state
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -214,10 +202,30 @@ const ProductPage: React.FC = () => {
     )
   }
 
+  // Helper components
+  const WeightInfoDisplay = () => (
+    <div className="bg-white p-4 rounded-lg shadow-md">
+      <div className="flex justify-between items-center">
+        <div>
+          <h4 className="font-semibold">Pack Details</h4>
+          <p className="text-sm text-gray-600">
+            {selectedPack} pack{selectedPack > 1 ? 's' : ''} = {selectedPack * 50}g
+          </p>
+        </div>
+        <div>
+          <h4 className="font-semibold">Total Weight</h4>
+          <p className="text-sm text-gray-600">
+            {quantity * selectedPack * 50}g (for {quantity} order{quantity > 1 ? 's' : ''})
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <>
       <div className="min-h-screen bg-gray-50">
-        {/* Breadcrumb */}
+        {/* Breadcrumb Navigation */}
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center space-x-2 text-sm">
@@ -237,8 +245,8 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Main Product Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Back Button */}
           <button
             onClick={() => navigate("/collection/afro-kinky-bulk")}
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors mb-8"
@@ -248,74 +256,53 @@ const ProductPage: React.FC = () => {
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Images */}
+            {/* Product Images Section */}
             <div className="space-y-4">
               <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg">
                 <img
                   src={currentProduct?.images?.[currentImageIndex] || currentProduct?.image}
                   alt={currentProduct?.name}
                   className="w-full h-96 lg:h-[500px] object-cover"
+                  loading="lazy"
                 />
 
-                {/* Image Navigation */}
+                {/* Image Navigation Controls */}
                 {currentProduct?.images && currentProduct.images.length > 1 && (
                   <>
                     <button
-                      onClick={() =>
-                        setCurrentImageIndex((prev) => (prev === 0 ? currentProduct.images.length - 1 : prev - 1))
-                      }
+                      onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? currentProduct.images.length - 1 : prev - 1))}
                       className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                      aria-label="Previous image"
                     >
                       <ChevronLeft size={20} />
                     </button>
                     <button
-                      onClick={() =>
-                        setCurrentImageIndex((prev) => (prev === currentProduct.images.length - 1 ? 0 : prev + 1))
-                      }
+                      onClick={() => setCurrentImageIndex((prev) => (prev === currentProduct.images.length - 1 ? 0 : prev + 1))}
                       className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                      aria-label="Next image"
                     >
                       <ChevronRight size={20} />
                     </button>
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                      {currentProduct.images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentImageIndex(index)}
+                          className={`w-3 h-3 rounded-full transition-colors ${
+                            index === currentImageIndex ? "bg-white" : "bg-white/50"
+                          }`}
+                          aria-label={`Go to image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
                   </>
-                )}
-
-                {/* Image Indicators */}
-                {currentProduct?.images && currentProduct.images.length > 1 && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    {currentProduct.images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-3 h-3 rounded-full transition-colors ${
-                          index === currentImageIndex ? "bg-white" : "bg-white/50"
-                        }`}
-                      />
-                    ))}
-                  </div>
                 )}
               </div>
 
-              {/* Weight Info for Desktop */}
-              {!isMobile && (
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h4 className="font-semibold">Pack Details</h4>
-                      <p className="text-sm text-gray-600">
-                        {selectedPack} pack{selectedPack > 1 ? 's' : ''} = {selectedPack * 50}g
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Total Weight</h4>
-                      <p className="text-sm text-gray-600">
-                        {quantity * selectedPack * 50}g (for {quantity} order{quantity > 1 ? 's' : ''})
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* Weight Info - Desktop */}
+              {!isMobile && <WeightInfoDisplay />}
 
-              {/* Thumbnail Images */}
+              {/* Thumbnail Gallery */}
               {currentProduct?.images && currentProduct.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
                   {currentProduct.images.map((image, index) => (
@@ -325,11 +312,13 @@ const ProductPage: React.FC = () => {
                       className={`relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow ${
                         index === currentImageIndex ? "ring-2 ring-gray-900" : ""
                       }`}
+                      aria-label={`View image ${index + 1}`}
                     >
                       <img
                         src={image || "/placeholder.svg"}
                         alt={`${currentProduct.name} ${index + 1}`}
                         className="w-full h-20 object-cover"
+                        loading="lazy"
                       />
                     </button>
                   ))}
@@ -337,9 +326,9 @@ const ProductPage: React.FC = () => {
               )}
             </div>
 
-            {/* Product Details */}
+            {/* Product Details Section */}
             <div className="space-y-6">
-              {/* Product Title & Rating */}
+              {/* Product Title and Rating */}
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">{currentProduct?.name}</h1>
                 <div className="flex items-center space-x-4 mb-4">
@@ -364,7 +353,7 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Pricing */}
+              {/* Pricing Information */}
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -392,7 +381,11 @@ const ProductPage: React.FC = () => {
                 <div className="flex items-center space-x-2 mb-3">
                   <h3 className="font-semibold text-gray-900">Color:</h3>
                   <span className="text-gray-600">{availableColors.find((c) => c.key === selectedColor)?.name}</span>
-                  <button onClick={() => setShowColorGuide(true)} className="text-gray-500 hover:text-gray-700">
+                  <button 
+                    onClick={() => setShowColorGuide(true)} 
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label="Color guide"
+                  >
                     <Info size={16} />
                   </button>
                 </div>
@@ -412,6 +405,7 @@ const ProductPage: React.FC = () => {
                         style={{
                           background: color.colorCode.includes("gradient") ? color.colorCode : color.colorCode,
                         }}
+                        aria-label={color.name}
                       ></div>
                       <span className="font-medium text-sm">{color.name}</span>
                     </button>
@@ -424,7 +418,11 @@ const ProductPage: React.FC = () => {
                 <div className="flex items-center space-x-2 mb-3">
                   <h3 className="font-semibold text-gray-900">Length:</h3>
                   <span className="text-gray-600">{selectedLength}</span>
-                  <button onClick={() => setShowSizeGuide(true)} className="text-gray-500 hover:text-gray-700">
+                  <button 
+                    onClick={() => setShowSizeGuide(true)} 
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label="Size guide"
+                  >
                     <Info size={16} />
                   </button>
                 </div>
@@ -492,7 +490,7 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quantity */}
+              {/* Quantity Selector */}
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Quantity:</h3>
                 <div className="flex items-center space-x-4">
@@ -500,6 +498,7 @@ const ProductPage: React.FC = () => {
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       className="p-3 hover:bg-gray-100 transition-colors"
+                      aria-label="Decrease quantity"
                     >
                       <Minus size={16} />
                     </button>
@@ -507,6 +506,7 @@ const ProductPage: React.FC = () => {
                     <button
                       onClick={() => setQuantity(quantity + 1)}
                       className="p-3 hover:bg-gray-100 transition-colors"
+                      aria-label="Increase quantity"
                     >
                       <Plus size={16} />
                     </button>
@@ -517,7 +517,7 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Total Price */}
+              {/* Total Price Display */}
               <div className="bg-gray-50 rounded-xl p-6">
                 <div className="flex items-center justify-between text-2xl font-bold">
                   <span>Total:</span>
@@ -546,25 +546,8 @@ const ProductPage: React.FC = () => {
                   <span>Add to Cart</span>
                 </button>
 
-                {/* Weight Info for Mobile */}
-                {isMobile && (
-                  <div className="bg-white p-4 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h4 className="font-semibold">Pack Details</h4>
-                        <p className="text-sm text-gray-600">
-                          {selectedPack} pack{selectedPack > 1 ? 's' : ''} = {selectedPack * 50}g
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">Total Weight</h4>
-                        <p className="text-sm text-gray-600">
-                          {quantity * selectedPack * 50}g (for {quantity} order{quantity > 1 ? 's' : ''})
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                {/* Weight Info - Mobile */}
+                {isMobile && <WeightInfoDisplay />}
               </div>
 
               {/* Trust Badges */}
@@ -662,7 +645,6 @@ const ProductPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-bold mb-6">Installation Guide</h3>
 
-                  {/* Video Tutorial */}
                   <div className="mb-8">
                     <h4 className="font-semibold mb-4">Video Tutorial</h4>
                     <div className="bg-gray-200 rounded-xl p-8 text-center">
@@ -680,53 +662,47 @@ const ProductPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Step-by-step Guide */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[
                       {
                         step: 1,
                         title: "Prepare Your Hair",
-                        description:
-                          "Wash and completely dry your natural hair. Detangle gently and section into small parts.",
+                        description: "Wash and completely dry your natural hair.",
                         image: "/IMG-20250629-WA0197.jpg",
                         tip: "Use a wide-tooth comb to prevent breakage",
                       },
                       {
                         step: 2,
                         title: "Section the Hair",
-                        description:
-                          "Create clean, even sections using a rat-tail comb. Each section should be about 1/4 inch wide.",
+                        description: "Create clean, even sections about 1/4 inch wide.",
                         image: "/IMG-20250629-WA0183.jpg",
-                        tip: "Smaller sections create neater, longer-lasting styles",
+                        tip: "Smaller sections create neater styles",
                       },
                       {
                         step: 3,
                         title: "Attach the Extensions",
-                        description:
-                          "Take a small amount of bulk hair and attach it to your natural hair using your preferred method.",
+                        description: "Attach bulk hair using your preferred method.",
                         image: "/IMG-20250629-WA0200.jpg",
                         tip: "Don't braid too tightly to avoid tension",
                       },
                       {
                         step: 4,
                         title: "Braid or Twist",
-                        description:
-                          "Begin braiding or twisting from the root, incorporating the bulk hair smoothly with your natural hair.",
+                        description: "Incorporate bulk hair with your natural hair.",
                         image: "/IMG-20250629-WA0168.jpg",
                         tip: "Keep consistent tension throughout",
                       },
                       {
                         step: 5,
                         title: "Secure the Ends",
-                        description:
-                          "Secure the ends with small elastic bands or by burning the tips (for synthetic blends only).",
+                        description: "Secure ends with small elastic bands.",
                         image: "/IMG-20250629-WA0180.jpg",
                         tip: "For human hair, use small clear elastics",
                       },
                       {
                         step: 6,
                         title: "Final Styling",
-                        description: "Style as desired and apply light oil or serum for shine and moisture.",
+                        description: "Style as desired and apply light oil.",
                         image: "/IMG-20250629-WA0185.jpg",
                         tip: "Less is more when it comes to products",
                       },
@@ -742,6 +718,7 @@ const ProductPage: React.FC = () => {
                           src={step.image || "/placeholder.svg"}
                           alt={step.title}
                           className="w-full h-48 object-cover rounded-lg mb-4"
+                          loading="lazy"
                         />
                         <p className="text-gray-700 mb-3">{step.description}</p>
                         <div className="bg-blue-50 border-l-4 border-blue-400 p-3 rounded">
@@ -767,7 +744,6 @@ const ProductPage: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Review Summary */}
                   <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="text-center">
@@ -804,7 +780,6 @@ const ProductPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Sample Reviews */}
                   <div className="space-y-6">
                     {[
                       {
@@ -812,8 +787,7 @@ const ProductPage: React.FC = () => {
                         rating: 5,
                         date: "2 weeks ago",
                         title: "Amazing quality!",
-                        review:
-                          "This hair is absolutely beautiful! The texture is perfect and it blends seamlessly with my natural hair. I've gotten so many compliments.",
+                        review: "This hair is absolutely beautiful! The texture is perfect.",
                         verified: true,
                       },
                       {
@@ -821,8 +795,7 @@ const ProductPage: React.FC = () => {
                         rating: 5,
                         date: "1 month ago",
                         title: "Perfect for protective styling",
-                        review:
-                          "I use this for my daughter's braids and it's perfect. Soft, manageable, and lasts a long time. Will definitely order again!",
+                        review: "I use this for my daughter's braids and it's perfect.",
                         verified: true,
                       },
                       {
@@ -830,8 +803,7 @@ const ProductPage: React.FC = () => {
                         rating: 4,
                         date: "3 weeks ago",
                         title: "Great value",
-                        review:
-                          "Good quality hair for the price. Easy to work with and the color matches perfectly. Shipping was fast too.",
+                        review: "Good quality hair for the price. Easy to work with.",
                         verified: true,
                       },
                     ].map((review, index) => (
@@ -881,7 +853,7 @@ const ProductPage: React.FC = () => {
                       <div className="space-y-3">
                         <div>
                           <p className="font-medium">Free Worldwide Shipping</p>
-                          <p className="text-sm text-gray-600">On all orders, no no minimum required</p>
+                          <p className="text-sm text-gray-600">On all orders</p>
                         </div>
                         <div>
                           <p className="font-medium">Processing Time</p>
@@ -891,10 +863,6 @@ const ProductPage: React.FC = () => {
                           <p className="font-medium">Delivery Time</p>
                           <p className="text-sm text-gray-600">5-7 business days (US)</p>
                           <p className="text-sm text-gray-600">7-14 business days (International)</p>
-                        </div>
-                        <div>
-                          <p className="font-medium">Tracking</p>
-                          <p className="text-sm text-gray-600">Provided for all orders</p>
                         </div>
                       </div>
                     </div>
@@ -911,6 +879,7 @@ const ProductPage: React.FC = () => {
                         </div>
                         <div>
                           <p className="font-medium">Condition</p>
+                         
                           <p className="text-sm text-gray-600">Items must be unused and in original packaging</p>
                         </div>
                         <div>
