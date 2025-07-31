@@ -512,7 +512,7 @@ const ProductPage: React.FC = () => {
               <div className="space-y-4">
                 <button
                   onClick={handleBuyNow}
-                  className="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
+                  className="w-full bg-pink-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-pink-800 transition-colors flex items-center justify-center space-x-2"
                 >
                   <CreditCard size={20} />
                   <span>Buy Now - ${pricing.totalPrice.toFixed(2)}</span>
@@ -520,7 +520,7 @@ const ProductPage: React.FC = () => {
 
                 <button
                   onClick={handleAddToCart}
-                  className="w-full border-2 border-gray-900 text-gray-900 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 hover:text-white transition-colors flex items-center justify-center space-x-2"
+                  className="w-full border-2 border-pink-900 text-gray-900 py-4 rounded-xl font-bold text-lg hover:bg-pink-900 hover:text-white transition-colors flex items-center justify-center space-x-2"
                 >
                   <ShoppingCart size={20} />
                   <span>Add to Cart</span>
