@@ -173,20 +173,20 @@ const Hero = () => {
           </p>
 
           {/* Call-to-Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 w-full max-w-md mx-auto">
+           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <button
               onClick={handleShopNow}
-              className="bg-gradient-to-r from-red-600 to-red-500 text-white px-12 py-3 sm:py-4 rounded-lg font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+              className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white px-10 py-5 rounded-xl font-bold text-xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-3 shadow-2xl"
             >
-              Shop Collection - Save 30%
-              <ArrowRight size={20} />
+              <span>Shop Collection - Save 30%</span>
+              <ArrowRight size={28} />
             </button>
             <button
               onClick={handleShopNow}
-              className="border-2 border-white text-white px-20 py-3 sm:py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              className="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-10 py-5 rounded-xl font-bold text-xl transition-all duration-300 shadow-2xl flex items-center justify-center space-x-3"
             >
-              View Afro Kinky Collection
-              <ArrowRight size={20} />
+              <span>View Afro Kinky Collection</span>
+              <ArrowRight size={28} />
             </button>
           </div>
 
