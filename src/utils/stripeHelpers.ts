@@ -1,4 +1,8 @@
 import { PAYMENT_CONFIG, TEST_CARDS } from '../config/payment';
+import { loadStripe } from '@stripe/stripe-js';
+
+// Initialize Stripe
+export const stripePromise = loadStripe(PAYMENT_CONFIG.stripe.publishableKey);
 
 // Stripe Payment Helper Functions
 export interface StripePaymentData {
@@ -26,8 +30,13 @@ export interface StripePaymentData {
 // Create Payment Intent (simulated for frontend-only demo)
 export const createPaymentIntent = async (paymentData: StripePaymentData) => {
   try {
-    // In a real application, this would call your backend API
-    // For demo purposes, we'll simulate the payment intent creation
+    // In a real application, you would call your backend API like this:
+    // const response = await fetch('/api/create-payment-intent', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(paymentData)
+    // });
+    // const result = await response.json();
     
     console.log('Creating payment intent with data:', paymentData);
     
@@ -207,4 +216,78 @@ export const dollarsToCents = (dollars: number): number => {
 // Convert cents to dollars
 export const centsToDollars = (cents: number): number => {
   return Math.round(cents) / 100;
+};
+
+// Create Stripe Checkout Session (for hosted checkout)
+export const createCheckoutSession = async (sessionData: {
+  line_items: any[];
+  customer_email: string;
+  success_url: string;
+  cancel_url: string;
+  metadata?: any;
+}) => {
+  try {
+    // In a real application, this would call your backend API
+    // const response = await fetch('/api/create-checkout-session', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(sessionData)
+    // });
+    // const session = await response.json();
+    
+    console.log('Creating checkout session with data:', sessionData);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Mock checkout session
+    const session = {
+      id: `cs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      url: `https://checkout.stripe.com/pay/cs_${Date.now()}`,
+      payment_status: 'unpaid',
+      amount_total: sessionData.line_items.reduce((sum, item) => 
+        sum + (item.price_data.unit_amount * item.quantity), 0
+      ),
+      currency: 'usd',
+      customer_details: {
+        email: sessionData.customer_email
+      },
+      metadata: sessionData.metadata || {}
+    };
+    
+    return { success: true, session };
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    return { success: false, error: 'Failed to create checkout session' };
+  }
+};
+
+// Retrieve Stripe Checkout Session
+export const retrieveCheckoutSession = async (sessionId: string) => {
+  try {
+    // In a real application, this would call your backend API
+    console.log('Retrieving checkout session:', sessionId);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Mock successful session retrieval
+    const session = {
+      id: sessionId,
+      payment_status: 'paid',
+      amount_total: 4500, // $45.00 in cents
+      currency: 'usd',
+      customer_details: {
+        email: 'customer@example.com',
+        name: 'John Doe'
+      },
+      payment_intent: `pi_${Date.now()}`,
+      created: Math.floor(Date.now() / 1000)
+    };
+    
+    return { success: true, session };
+  } catch (error) {
+    console.error('Error retrieving checkout session:', error);
+    return { success: false, error: 'Failed to retrieve checkout session' };
+  }
 };

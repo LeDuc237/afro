@@ -12,7 +12,7 @@ export const PAYMENT_CONFIG = {
 
   // Stripe Configuration
   stripe: {
-    publishableKey: "pk_test_51Rmqwp4EwiCKm6QZl5S0GqIdbspqC1ew4N7JeNZnBKdSB0Jj8Q1vuJZ4H4p5jazdwEX1RSEODHssd8NI6mji30MR00vPk59Cak",
+    publishableKey: "pk_test_51Rse6LQcCvouwfQJLwKe7MwjVeko3pwuieI9ggjHRI4g2DxiFas3WMHyPxuqSecE145V2eAwBG3E0R6iV22C9Xvn00UmKGNDHb",
     // Note: Secret key (sk_test_51•••••6BV) should NEVER be in frontend code - keep it on your server
     currency: "USD",
     environment: "test" // Change to "live" when ready for production

@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { useState } from "react"
-import { X, CreditCard, Shield, Lock, CheckCircle, Star, Truck } from "lucide-react"
+import { X, CreditCard, Shield, Lock, CheckCircle, Star, Truck, AlertCircle } from "lucide-react"
+import StripePaymentForm from "./StripePaymentForm"
 import {
   createPaymentIntent,
   confirmPayment,
@@ -45,6 +46,59 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, total, ite
   const [paymentError, setPaymentError] = useState("")
 
   if (!isOpen) return null
+
+  const handleStripeSuccess = (paymentResult: any) => {
+    console.log('Stripe payment successful:', paymentResult);
+    
+    // Send order notification emails
+    const orderDetails = {
+      orderId: paymentResult.id,
+      customerName: `${formData.firstName} ${formData.lastName}`,
+      customerEmail: formData.email,
+      products: items.map((item) => ({
+        name: item.name,
+        color: item.shade || item.color,
+        length: item.length,
+        packs: item.selectedPacks || 1,
+        quantity: item.quantity || 1,
+        price: item.price * (item.quantity || 1),
+      })),
+      total: finalTotal,
+      shippingAddress: {
+        street: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        country: "US",
+      },
+      paymentMethod: "Credit Card (Stripe)",
+      orderDate: new Date().toISOString(),
+    }
+
+    // Send emails (in background)
+    sendOrderNotificationEmail(orderDetails).catch(console.error)
+    sendCustomerConfirmationEmail(orderDetails).catch(console.error)
+
+    setPaymentSuccess(true)
+
+    setTimeout(() => {
+      alert(`🎉 Payment Successful! 
+
+Transaction ID: ${paymentResult.id}
+Amount: $${finalTotal.toFixed(2)}
+Payment Method: Stripe
+
+Your premium hair extensions will be shipped within 24 hours with free tracking!
+
+Thank you for choosing Blen Hairs! 💫`)
+      onClose()
+      setPaymentSuccess(false)
+    }, 2000)
+  }
+
+  const handleStripeError = (error: string) => {
+    setPaymentError(error)
+  }
 
   const validateForm = () => {
     const newErrors: any = {}
@@ -644,102 +698,53 @@ Thank you for choosing Blen Hairs! 💫`)
               {paymentMethod === "card" && (
                 <div className="bg-gray-50 rounded-xl p-4">
                   <h4 className="font-bold mb-3 text-gray-900">Payment Information</h4>
-                  <div className="space-y-3">
-                    <div>
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        placeholder="Card number"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 ${
-                          errors.cardNumber ? "border-red-500" : "border-gray-200"
-                        }`}
-                        maxLength={23}
-                        required
-                      />
-                      {cardBrand && (
-                        <div className="mt-1 text-sm text-gray-600 capitalize">{cardBrand} card detected</div>
-                      )}
-                      {errors.cardNumber && <p className="text-red-500 text-sm mt-1">{errors.cardNumber}</p>}
-                    </div>
-                    <div>
-                      <input
-                        type="text"
-                        name="nameOnCard"
-                        placeholder="Name on card"
-                        value={formData.nameOnCard}
-                        onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 ${
-                          errors.nameOnCard ? "border-red-500" : "border-gray-200"
-                        }`}
-                        required
-                      />
-                      {errors.nameOnCard && <p className="text-red-500 text-sm mt-1">{errors.nameOnCard}</p>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <input
-                          type="text"
-                          name="expiryDate"
-                          placeholder="MM/YY"
-                          value={formData.expiryDate}
-                          onChange={handleInputChange}
-                          className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 ${
-                            errors.expiryDate ? "border-red-500" : "border-gray-200"
-                          }`}
-                          maxLength={5}
-                          required
-                        />
-                        {errors.expiryDate && <p className="text-red-500 text-sm mt-1">{errors.expiryDate}</p>}
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="cvv"
-                          placeholder="CVV"
-                          value={formData.cvv}
-                          onChange={handleInputChange}
-                          className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 ${
-                            errors.cvv ? "border-red-500" : "border-gray-200"
-                          }`}
-                          required
-                        />
-                        {errors.cvv && <p className="text-red-500 text-sm mt-1">{errors.cvv}</p>}
-                      </div>
-                    </div>
-                  </div>
+                  
+                  {/* Stripe Payment Form */}
+                  <StripePaymentForm
+                    amount={finalTotal}
+                    onSuccess={handleStripeSuccess}
+                    onError={handleStripeError}
+                    customerInfo={{
+                      email: formData.email,
+                      name: `${formData.firstName} ${formData.lastName}`
+                    }}
+                  />
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full bg-gradient-to-r from-gray-900 to-gray-700 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
-              >
-                {isProcessing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>Processing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock size={20} />
-                    <span>Complete Order - ${finalTotal.toFixed(2)}</span>
-                  </>
-                )}
-              </button>
+              {/* Only show submit button for PayPal */}
+              {paymentMethod === "paypal" && (
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>Processing PayPal...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106z"/>
+                      </svg>
+                      <span>Pay with PayPal - ${finalTotal.toFixed(2)}</span>
+                    </>
+                  )}
+                </button>
+              )}
             </form>
 
             {/* Security Footer */}
             <div className="mt-6 text-center">
               <div className="flex items-center justify-center space-x-2 text-xs text-gray-600 bg-green-50 p-3 rounded-lg">
                 <Shield size={14} className="text-green-600" />
-                <span>Your payment information is encrypted and secure</span>
+                <span>Powered by Stripe - Bank-level security & encryption</span>
               </div>
               <div className="mt-2 text-xs text-gray-500">
-                <p>Powered by Stripe & PayPal - Industry leading security</p>
-                <p>Test mode: Use the test card numbers above for Stripe</p>
+                <p>SSL encrypted • PCI DSS compliant • 3D Secure supported</p>
+                <p>Test mode: Use card 4242 4242 4242 4242 with any future date and CVC</p>
               </div>
             </div>
           </div>
